@@ -1,0 +1,3 @@
+Prompt templates and Strutured output project => lec 1
+Excel 25 formulas and pivot table and ai in Excel
+

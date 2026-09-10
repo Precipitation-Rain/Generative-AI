@@ -1,0 +1,6 @@
+1) What is RAG
+2) RAG Struture:user upload document --> document loader --> text splitter  --> embedding generation  --> user ask quetion --> questions embedding --> similarity search --> return chunks with context(retrival) --> llm reads it and give final answer
+3) Document Loader , Text Splitter , Retrival Mechanism
+
+
+
