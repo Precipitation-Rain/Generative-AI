@@ -1,0 +1,22 @@
+1)Runnables:
+- chains background
+- need of chains
+- how runables come into picture
+- sequential Runnables
+- parllel Runnables
+- passthrough Runnables
+
+2)Tools:
+- Build in Tools
+- Custom Tools
+- tool Binding
+- tool calling
+- tool execution
+- tool calling using the messages
+
+3)Agents:
+- Create agent Manually(Human in the Loop)
+- Create agent using create_agent
+
+
+

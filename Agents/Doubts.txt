@@ -1,0 +1,864 @@
+1)Why langchain comes into picture
+2)Doing manully measn the doing each and each step like
+- cleaning the input
+- creating the propt
+- sending it to the llm
+- parsing the output
+3)What is componenets
+4)How we manully doing all of these ==> feeding output of one step into another step
+5)What is the problem with doing all of these manully
+6)Where chains comes into the picture
+7)Whats is the problem with chains
+8)How Runnables comes into picture
+9)How Runnables solve that problem
+10)Do code for the sequecerunnable.py
+11)Which componest are runnables:
+llm modles
+prompt templates
+output parsers
+tools
+12)There are so many things we acn do while building any project and each componenet has so many functions then how this chains/runnables make them unified?
+13) Types of Runnables
+ - sequential Runnables
+ - Parallel Runnables
+14)What is the problem with the sequential Runnable
+15) How would code will look without the parellel runnables
+16)why we need parllel when we can get same result using sequential way.
+measn we can write some code and get the same result
+17)How data flow inside parllel sequencing
+18)How can we give multiple inputs like in topic1 : "ML" , topic2 = "DL"
+
+19)Why sqquential Runnble fails :
+### Sequential Runnable
+
+Sequential means **one step's output becomes the next step's input**.
+
+```text
+Input
+ ↓
+Step 1
+ ↓
+Output 1
+ ↓
+Step 2
+ ↓
+Output 2
+```
+
+So if you have:
+
+```text
+Machine Learning → Short prompt
+Deep Learning    → Detailed prompt
+```
+
+Sequential has a problem: after the first step, it naturally passes the **short answer** to the next step. It doesn't automatically keep `"Deep Learning"` available.
+
+---
+
+### RunnableParallel
+
+Parallel is used when you have **independent tasks**.
+
+```text
+              Input
+             /     \
+            ↓       ↓
+   Machine Learning  Deep Learning
+          ↓               ↓
+    Short prompt    Detailed prompt
+          ↓               ↓
+      Answer 1         Answer 2
+```
+
+Each branch gets the original input and takes what it needs.
+
+### In one line:
+
+**Sequential = output of one step → next step**
+
+**Parallel = same input → multiple independent steps**
+
+That's why your **short + detailed** example is better suited to `RunnableParallel`.
+
+
+20) How Runnbles come into picture:
+**Yes yaar, exactly.** Your understanding is right. Just one small correction in the terminology.
+
+### Why Runnable?
+
+Without Runnables, you might write separate code for every task:
+
+```text
+Model + Prompt + Parser → Short
+Model + Prompt + Parser → Detailed
+Model + Prompt + Parser → Summary
+```
+
+There is lots of repeated code.
+
+**Runnables give us a standard way to connect these components:**
+
+```text
+Prompt → Model → Parser
+```
+
+---
+
+### Then why `RunnableSequence`?
+
+When you have **dependent steps**:
+
+```text
+Input → Prompt → Model → Output
+                    ↓
+                  next step
+```
+
+We use `RunnableSequence` / `|`.
+
+But when you have **independent tasks**, sequential becomes messy because you have to carry the required inputs from one step to the next.
+
+---
+
+### Why `RunnableParallel`?
+
+So we use:
+
+```text
+             Input
+            /     \
+           ↓       ↓
+       Short     Detailed
+        chain      chain
+           ↓       ↓
+        Answer    Answer
+```
+
+So your understanding is:
+
+> **Runnables → make it easy to connect and reuse components without repeating code.**
+
+> **Sequence → connect steps one after another.**
+
+> **Parallel → handle multiple independent tasks/inputs cleanly.**
+
+That's it. ✅
+
+21)Diff between from messages and from template in chatprompttemplate is that in messages you can efine role and it is used for the multiple conditions use case while the template hs fixed template and used for simple use case
+22)StuOutputParser extrats the cotent from raw msg.
+the output of the llm contains [content , user_metadata , additional_kwargs , response_metadata]
+23)from messages is used for the multiple rols and prompts.
+from template is used for the single prompt
+24)when we use parllel runnable at that time the output is in dict otherwise we do not need to use ['key] to get output(when we print output)
+
+25)Why we are doing amnual execution in This 4 step process:
+- eacuse in our code we are acting as the agent
+- in real code agent itself execute the tool calling
+
+26)LANGCHAIN TOOL CALLING — COMPLETE Q&A
+
+1. What is Tool Building?
+
+Answer:
+Tool Building means creating a Python function that the LLM can use as a tool.
+
+Example:
+@tool
+def get_length(text: str) -> int:
+    return len(text)
+
+"Hello" → 5
+
+
+2. What does @tool do?
+
+Answer:
+@tool converts a normal Python function into a LangChain Tool that the LLM can understand and call.
+
+Example:
+@tool
+def get_length(text: str) -> int:
+    return len(text)
+
+
+3. What is Tool Binding?
+
+Answer:
+Tool Binding means telling the LLM which tools are available to use.
+
+Example:
+llm_with_tool = llm.bind_tools([get_length])
+
+Meaning:
+LLM → "You can use the get_length tool."
+
+
+4. What is Tool Calling?
+
+Answer:
+Tool Calling happens when the LLM decides that it needs a tool and creates a structured request for that tool.
+
+Example:
+User: What is the length of "Hello"?
+
+LLM:
+Tool → get_length
+Args → {"text": "Hello"}
+
+
+5. Does the LLM actually execute the Python function?
+
+Answer:
+No.
+
+The LLM only decides:
+- Which tool to use
+- What arguments to pass
+
+Python actually executes the tool.
+
+LLM → Decides
+Python → Executes
+
+
+6. What is Tool Execution?
+
+Answer:
+Tool Execution means actually running the selected Python function.
+
+Example:
+tool_args = {"text": "Hello"}
+
+tool_result = get_length.invoke(tool_args)
+
+Output:
+5
+
+
+7. What is the complete Tool Calling process?
+
+Answer:
+
+User
+ ↓
+LLM
+ ↓
+Tool Call
+(name + args)
+ ↓
+Python Tool Execution
+ ↓
+Tool Result
+ ↓
+LLM
+ ↓
+Final Answer
+
+Example:
+
+"What is the length of Hello?"
+        ↓
+LLM chooses get_length
+        ↓
+args = {"text": "Hello"}
+        ↓
+get_length()
+        ↓
+5
+        ↓
+"The length is 5."
+
+
+8. Why does result become an AIMessage?
+
+Answer:
+Because result is the response generated by the LLM.
+
+Example:
+result = llm_with_tool.invoke(prompt)
+
+result → AIMessage
+
+For tool calling, the AIMessage can contain:
+- content
+- tool_calls
+
+The content can be empty because the LLM is requesting a tool instead of giving the final answer.
+
+
+9. Why can result.content be empty?
+
+Answer:
+Because the LLM may be requesting a tool instead of giving a normal text answer.
+
+Example:
+
+result.content
+→ ""
+
+result.tool_calls
+→ contains the tool request
+
+So an empty content does NOT necessarily mean something went wrong.
+
+
+10. What is result.tool_calls?
+
+Answer:
+result.tool_calls contains the tool calls requested by the LLM.
+
+Example:
+
+[
+    {
+        "name": "get_length",
+        "args": {
+            "text": "Hello"
+        }
+    }
+]
+
+
+11. What is inside result.tool_calls[0]?
+
+Answer:
+It represents one complete tool call.
+
+Example:
+
+{
+    "name": "get_length",
+    "args": {
+        "text": "Hello"
+    }
+}
+
+name → Which tool?
+args → What input?
+
+
+12. Why do we extract the tool name?
+
+Answer:
+Because the LLM may choose different tools.
+
+Example:
+
+tools = {
+    "get_length": get_length,
+    "add_numbers": add_numbers,
+    "get_weather": get_weather
+}
+
+tool_name = tool_call["name"]
+
+If:
+tool_name = "get_length"
+
+Then:
+tool = tools[tool_name]
+
+Python dynamically selects get_length.
+
+
+13. Why do we extract tool_args?
+
+Answer:
+Because tool_args contains the actual input required by the Python function.
+
+Example:
+
+tool_args = tool_call["args"]
+
+Output:
+
+{"text": "Hello"}
+
+Then:
+
+get_length.invoke(tool_args)
+
+executes the function with "Hello".
+
+
+14. Why do we use a tools dictionary?
+
+Answer:
+The tools dictionary allows us to dynamically find and execute the tool selected by the LLM.
+
+Example:
+
+tools = {
+    "get_length": get_length,
+    "add_numbers": add_numbers
+}
+
+tool_name = "get_length"
+
+tool = tools[tool_name]
+
+This avoids writing many if/elif conditions.
+
+
+15. What happens if there are multiple tools?
+
+Answer:
+The LLM decides which tool is required.
+
+Example:
+
+tools = {
+    "get_length": get_length,
+    "add_numbers": add_numbers
+}
+
+User:
+Add 10 and 20.
+
+LLM may return:
+
+{
+    "name": "add_numbers",
+    "args": {
+        "a": 10,
+        "b": 20
+    }
+}
+
+The dictionary then selects add_numbers.
+
+
+16. Why do we maintain a message list/history?
+
+Answer:
+Because the LLM needs to remember what happened in the previous steps.
+
+Example:
+
+messages = []
+
+messages.append(query)
+messages.append(result)
+messages.append(tool_result)
+
+Flow:
+
+User question
+ ↓
+AI tool request
+ ↓
+Tool result
+ ↓
+AI final answer
+
+The history gives the LLM the complete context.
+
+
+17. Why do we send the previous messages back to the LLM?
+
+Answer:
+Because the LLM needs to understand where the tool result came from.
+
+Example:
+
+User:
+"What is the length of Hello?"
+
+LLM:
+"Use get_length."
+
+Tool:
+"5"
+
+The LLM needs to know that "5" is the result of get_length.
+
+Therefore, we maintain and send the message history.
+
+
+18. Why does message order matter?
+
+Answer:
+A Python list maintains the order of messages.
+
+Example:
+
+messages = [
+    HumanMessage(...),
+    AIMessage(...),
+    ToolMessage(...)
+]
+
+Order:
+
+Human → AI → Tool
+
+This helps the LLM understand what happened step by step.
+
+
+19. What is HumanMessage?
+
+Answer:
+HumanMessage represents the user's message.
+
+Example:
+
+HumanMessage("What is the length of Hello?")
+
+Meaning:
+
+USER → message
+
+
+20. What is AIMessage?
+
+Answer:
+AIMessage represents the LLM's response.
+
+Example:
+
+AIMessage("I will use get_length.")
+
+During tool calling, it can contain:
+
+AIMessage(
+    content="",
+    tool_calls=[...]
+)
+
+
+21. What is ToolMessage?
+
+Answer:
+ToolMessage represents a tool result inside LangChain's message-based flow.
+
+Example:
+
+AI → Call get_length
+Tool → 5
+
+The 5 can be represented as:
+
+ToolMessage(content="5")
+
+
+22. Is a tool's result ALWAYS a ToolMessage?
+
+Answer:
+No.
+
+It depends on how the tool is invoked.
+
+If we pass normal arguments:
+
+get_length.invoke({"text": "Hello"})
+
+we can get the actual result:
+
+5
+
+If we pass a complete tool-call structure, LangChain can represent the result as a ToolMessage.
+
+Simple idea:
+
+Normal args → Actual tool result
+Tool-call structure → ToolMessage representation
+
+
+23. Why does get_length.invoke(tool_args) give 17?
+
+Answer:
+
+tool_args = result.tool_calls[0]["args"]
+
+Suppose:
+
+tool_args = {
+    "text": "I am Rajvardhan"
+}
+
+Then:
+
+get_length.invoke(tool_args)
+
+executes:
+
+get_length("I am Rajvardhan")
+
+and returns:
+
+17
+
+
+24. Why can passing result.tool_calls[0] give a ToolMessage?
+
+Answer:
+Because result.tool_calls[0] contains the complete tool-call information.
+
+Example:
+
+{
+    "name": "get_length",
+    "args": {
+        "text": "I am Rajvardhan"
+    },
+    "id": "..."
+}
+
+This contains more than just the function arguments.
+
+LangChain can treat this as a tool-call execution/result flow and return a ToolMessage associated with that call.
+
+
+25. Why don't we need tool_name if we directly call get_length?
+
+Answer:
+If we already know which function to call, we don't need tool_name.
+
+Example:
+
+get_length.invoke(tool_args)
+
+Here we manually selected get_length.
+
+But if we want dynamic execution:
+
+tool = tools[tool_name]
+tool.invoke(tool_args)
+
+then tool_name is required.
+
+
+26. Why use tools[tool_name] instead of directly calling get_length?
+
+Answer:
+Because the LLM may select any tool.
+
+Example:
+
+tool_name = "get_length"
+
+tools[tool_name]
+→ get_length
+
+If:
+
+tool_name = "add_numbers"
+
+tools[tool_name]
+→ add_numbers
+
+So the code dynamically executes whichever tool the LLM selected.
+
+
+27. Why do we call the LLM again after getting the tool result?
+
+Answer:
+Because the first LLM call usually only decides which tool to use.
+
+Example:
+
+First LLM call:
+"I need to use get_length."
+
+Tool:
+17
+
+Second LLM call:
+"The length of the text is 17."
+
+The second LLM call converts the tool result into the final user-friendly answer.
+
+
+28. Why use llm instead of llm_with_tool for the final answer?
+
+Answer:
+After the tool has already been executed, we normally don't need the LLM to decide another tool call.
+
+So:
+
+final_response = llm.invoke(...)
+
+is cleaner.
+
+The tool-enabled LLM is mainly needed when we want the LLM to choose tools.
+
+
+29. What is the difference between tool_result and ToolMessage?
+
+Answer:
+
+If we directly execute:
+
+tool_result = get_length.invoke(tool_args)
+
+we may get:
+
+17
+
+If the result is represented as a LangChain message, we may get:
+
+ToolMessage(content="17", ...)
+
+If you have a ToolMessage, the actual result can be accessed using:
+
+tool_message.content
+
+
+30. What are the 4 basic parts of Tool Calling?
+
+Answer:
+
+1. Tool Building
+   → Create the tool
+
+2. Tool Binding
+   → Give the tool to the LLM
+
+3. Tool Calling
+   → LLM selects the tool and provides arguments
+
+4. Tool Execution
+   → Python executes the tool
+
+
+31. Is manual Tool Calling already an Agent?
+
+Answer:
+Not exactly.
+
+If we manually write:
+
+if result.tool_calls:
+    ...
+
+and execute the tool ourselves, it is manual tool calling.
+
+An Agent automates this process and can repeat the loop:
+
+LLM
+ ↓
+Tool
+ ↓
+Result
+ ↓
+LLM
+ ↓
+Another Tool
+ ↓
+Result
+ ↓
+LLM
+ ↓
+Final Answer
+
+
+32. What is the difference between Tool Calling and Agents?
+
+Answer:
+
+Tool Calling:
+
+LLM decides → You execute the tool
+
+Agent:
+
+LLM decides
+ ↓
+Agent executes tool
+ ↓
+Observes result
+ ↓
+LLM decides next step
+ ↓
+Repeats if needed
+ ↓
+Final answer
+
+
+33. What is the main difference between tool_args and result.tool_calls[0]?
+
+Answer:
+
+tool_args contains only the arguments for the function.
+
+Example:
+
+{
+    "text": "Hello"
+}
+
+result.tool_calls[0] contains the complete tool-call information.
+
+Example:
+
+{
+    "name": "get_length",
+    "args": {
+        "text": "Hello"
+    },
+    "id": "..."
+}
+
+So:
+
+tool_args
+→ WHAT INPUT?
+
+result.tool_calls[0]
+→ WHICH TOOL + WHAT INPUT + other tool-call information
+
+
+34. Which way is clearer for manual tool execution?
+
+Answer:
+
+For manual execution, this is simple and clear:
+
+tool_call = result.tool_calls[0]
+
+tool_name = tool_call["name"]
+tool_args = tool_call["args"]
+
+tool_result = get_length.invoke(tool_args)
+
+Here:
+
+tool_name → selects the tool
+tool_args → gives input to the tool
+tool_result → actual result
+
+
+FINAL MENTAL MODEL
+
+@tool
+↓
+Build the tool
+
+bind_tools()
+↓
+Give tools to LLM
+
+tool_calls
+↓
+LLM tells us:
+WHICH tool + WHAT arguments
+
+tool.invoke(args)
+↓
+Execute Python function
+
+Tool Result
+↓
+Give result back to LLM
+
+LLM
+↓
+Final Answer
+
+
+MOST IMPORTANT LINE:
+
+LLM DECIDES WHAT TO DO.
+PYTHON TOOL ACTUALLY DOES THE WORK.
+
