@@ -1,25 +1,26 @@
 <p align="center">
-  <img src="./assets/banner.svg" alt="Generative AI: Learning by Building" width="100%">
-</p>
-
-<p align="center">
   <img src="https://skillicons.dev/icons?i=py,pytorch,git,github,vscode&theme=dark" alt="core tools">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white" alt="LangChain">
-  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Streamlit">
-  <img src="https://img.shields.io/badge/Hugging%20Face-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black" alt="Hugging Face">
-  <img src="https://img.shields.io/badge/Google%20Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Google Gemini">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/LangChain-1C3C3C?style=flat&logo=langchain&logoColor=white" alt="LangChain">
+  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=flat&logo=streamlit&logoColor=white" alt="Streamlit">
+  <img src="https://img.shields.io/badge/Hugging%20Face-FFD21E?style=flat&logo=huggingface&logoColor=black" alt="Hugging Face">
+  <img src="https://img.shields.io/badge/Google%20Gemini-8E75B2?style=flat&logo=googlegemini&logoColor=white" alt="Google Gemini">
+  <img src="https://img.shields.io/badge/Mistral%20AI-FA520F?style=flat&logo=mistralai&logoColor=white" alt="Mistral AI">
+  <img src="https://img.shields.io/badge/Groq-F55036?style=flat" alt="Groq">
+  <img src="https://img.shields.io/badge/ChromaDB-FFB000?style=flat" alt="ChromaDB">
+  <img src="https://img.shields.io/badge/Tavily-4F46E5?style=flat" alt="Tavily">
+  <img src="https://img.shields.io/badge/Pydantic-E92063?style=flat&logo=pydantic&logoColor=white" alt="Pydantic">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Groq-F55036?style=for-the-badge" alt="Groq">
-  <img src="https://img.shields.io/badge/Mistral%20AI-FA520F?style=for-the-badge&logo=mistralai&logoColor=white" alt="Mistral AI">
-  <img src="https://img.shields.io/badge/ChromaDB-FFB000?style=for-the-badge" alt="ChromaDB">
-  <img src="https://img.shields.io/badge/Tavily-4F46E5?style=for-the-badge" alt="Tavily">
-  <img src="https://img.shields.io/badge/Pydantic-E92063?style=for-the-badge&logo=pydantic&logoColor=white" alt="Pydantic">
+  <img src="https://img.shields.io/badge/Domain-Generative%20AI-006400?style=flat" alt="Domain: Generative AI">
+  <img src="https://img.shields.io/badge/Modules-3-0077B6?style=flat" alt="Modules: 3">
+  <img src="https://img.shields.io/badge/Python%20Scripts-40-0077B6?style=flat" alt="Python Scripts: 40">
+  <img src="https://img.shields.io/badge/Apps-5%20Streamlit-5E35B1?style=flat" alt="Apps: 5 Streamlit">
+  <img src="https://img.shields.io/badge/Status-Learning%20in%20Public-E07B39?style=flat" alt="Status: Learning in Public">
 </p>
 
 # Generative AI: Learning by Building
@@ -31,6 +32,54 @@ The repo has three modules that build on each other:
 1. **LangChain**: models, prompts, embeddings, structured output
 2. **RAG**: loaders, splitters, vector store, retrievers, a full PDF Q&A app
 3. **Agents**: runnables, tool calling, human-in-the-loop agents
+
+---
+
+## In Simple Words (No Tech Background Needed)
+
+**What is this project?**
+
+- I am learning how modern AI tools like ChatGPT-style assistants are built.
+- For every idea I learned, I built a small working project.
+- This repo is the collection of those projects.
+
+**What can these projects do?**
+
+| Project | What it does in plain English |
+|---------|-------------------------------|
+| PDF Assistant | You upload a PDF. You ask questions. It answers using only that PDF and shows the page it used. |
+| Movie Info Extractor | You paste a movie description. It returns neat details: title, year, cast, rating. |
+| City Assistant | You ask about weather or news in a city. It asks your permission before looking anything up. |
+| TRON Chatbot | A friendly chatbot with a personality (funny, angry or sad). |
+
+**Key words, explained simply**
+
+| Term | Simple meaning |
+|------|----------------|
+| **LLM** (Large Language Model) | The AI "brain" that reads and writes text, like the one behind ChatGPT. |
+| **LangChain** | A toolkit that connects the AI brain to prompts, files and other tools. |
+| **Embeddings** | Turning text into numbers so a computer can tell which texts mean similar things. |
+| **Vector database** | A smart filing cabinet that finds text by meaning, not exact words. |
+| **RAG** | Like an open-book exam: the AI first looks up the right pages, then answers from them. |
+| **Tool** | A skill the AI can use, like checking the weather or searching news. |
+| **Agent** | An AI assistant that decides which tool to use and when. |
+| **Human-in-the-loop** | The AI asks a person to approve before it acts. |
+| **Streamlit** | A way to turn Python code into a simple web page anyone can click through. |
+
+**Why this matters**
+
+- Plain AI chatbots can make up answers. RAG makes them answer from real documents.
+- Letting AI use tools makes it more useful.
+- Asking for approval keeps a human in control.
+
+---
+
+## Quick Navigation
+
+- [Overview graphs](#overview)
+- [Repository structure](#repository-structure) (for developers)
+- [Setup and run](#setup)
+- [Key learnings](#key-learnings)
 
 ---
 
@@ -73,9 +122,10 @@ pie showData
 
 ## Repository Structure
 
+> From here on, the content is for developers.
+
 ```
 Generative-AI/
-├── assets/                          # README banner
 ├── LangChain/
 │   ├── chatmodels/                  # chat models + chatbots
 │   ├── embeddingmodels/             # Google + HuggingFace embeddings
